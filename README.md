@@ -1,7 +1,28 @@
 # Auction House [link](https://docs.metaplex.com/programs/auction-house/)
 - Creating an Auction House
-- Listing and Bidding
+    - new Auction House account (PDA)
+        - requireSignOff
+        - canChangeSalePrice
+        - sellerFeeBasisPoints
+
+- Listing 
+    - `SellerTradeState` PDA which represents the listing of the asset
+        - Seller Trade State (PDA)
+        - Buyer Trade State (PDA)
+        - Free Sellers Trade State (PDA)
+
+    - `programAsSigner` PDA use as Delegate
+
+- Bidding
+    - `BuyerTradeState` PDA representing the bid
+    - `BuyerEscrowAccount` PDA, which holds this amount till the sale goes through, needs to be transferred manually by the marketplace to the `BuyerEscrowAccount`
+
 - Executing a Sale
+    - `executeSale` instruction: a permission-less crank, can be executed by anyone without any fee or reward.
+    - On the execution of the `executeSale` instruction, two things happen:
+        - The Auction House pulls the bid amount stored in the BuyerEscrowAccount and transfers this amount to the lister
+        - The programAsSigner PDA, which the Auction House assigned as the Delegate, pulls the asset from the lister's wallet (more specifically, from the Token Account in the lister's wallet), and transfers the asset into the bidder's wallet, thus completing the trade
+
 - Auctioning Fungible Assets
 - Buying asset using a custom SPL Token
 - Custom Order Matching
